@@ -1,0 +1,8 @@
+{
+  "name": "3DPrintingClub",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite",
+  "id": "32ffd401"
+}
