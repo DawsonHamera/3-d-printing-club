@@ -6,6 +6,7 @@ import Tab2 from "./Tab2";
 import Tab3 from "./Tab3";
 import { useAuth } from "../../providers/AuthProvider";
 import Profile from "./Profile";
+import CalendarPage from "./CalendarPage";
 
 const Dashboard: React.FC = () => {
     const { authState, isLoading } = useAuth();
@@ -22,8 +23,8 @@ const Dashboard: React.FC = () => {
                 <Route exact path="/dashboard/profile">
                     <Profile />
                 </Route>
-                <Route path="/dashboard/tab2">
-                    <Tab2 />
+                <Route path="/dashboard/calendar">
+                    <CalendarPage />
                 </Route>
                 <Route path="/dashboard/tab3">
                     <Tab3 />
@@ -34,7 +35,7 @@ const Dashboard: React.FC = () => {
                 <IonTabButton tab="tab1" href="/dashboard/profile">
                     <IonIcon aria-hidden="true" icon={personCircleOutline} />
                 </IonTabButton>
-                <IonTabButton tab="tab2" href="/dashboard/tab2">
+                <IonTabButton tab="tab2" href="/dashboard/calendar">
                     <IonIcon aria-hidden="true" icon={calendarOutline} />
                 </IonTabButton>
                 <IonTabButton tab="tab3" href="/dashboard/tab3">

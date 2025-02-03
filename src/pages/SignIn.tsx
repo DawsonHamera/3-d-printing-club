@@ -61,11 +61,6 @@ const SignIn: React.FC = () => {
                             Don't have an account? <a href="/signup">Sign up</a>
                         </p>
                     </IonText>
-                    <IonText>
-                        <p>
-                            j: {authState?.authenticated ? 'true' : 'false'}
-                        </p>
-                    </IonText>
                 </IonFooter>
 
                 {/* Alert for empty fields */}

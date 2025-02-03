@@ -1,0 +1,16 @@
+
+.card {
+    border-left: 6px solid var(--ion-color-primary);
+}
+.vertical {
+    writing-mode: vertical-lr;
+    /* text-orientation:upright; */
+    text-align: center;
+    font-weight: bold;
+    
+}
+.vertical-container {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
