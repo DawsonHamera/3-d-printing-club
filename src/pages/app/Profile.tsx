@@ -1,9 +1,18 @@
 import React from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonAvatar, IonLabel, IonItem, IonList } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonAvatar, IonLabel, IonItem, IonList, IonButton } from '@ionic/react';
 import { useAuth } from '../../providers/AuthProvider';
 
 const Profile: React.FC = () => {
-  const { userState } = useAuth()
+  const { userState, onLogout } = useAuth();
+
+  const handleLogout = async () => {
+    if (onLogout) {
+      await onLogout();
+    } else {
+      console.error("Logout function is undefined");
+    }
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -35,6 +44,7 @@ const Profile: React.FC = () => {
             </IonLabel>
           </IonItem>
         </IonList>
+        <IonButton onClick={handleLogout}>Log out</IonButton>
       </IonContent>
     </IonPage>
   );

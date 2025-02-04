@@ -93,6 +93,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }, []);
 
     const logout = useCallback(async () => {
+        console.log("logging out...")
         localStorage.removeItem(TOKEN_KEY);
         delete axios.defaults.headers.common['Authorization'];
         setAuthState({ token: null, authenticated: false });
