@@ -14,15 +14,19 @@ const SignIn: React.FC = () => {
     const { onLogin, authState } = useAuth()
 
     const login = async () => {
-        const result = await onLogin(email, password)
-        if (result && result.error) {
-            setShowAlert(true)
-            setAlertMessage(result.msg)
-            
-        }
-        else {
-            setShowAlert(false)
-            history.push('/dashboard')
+        if (onLogin) {
+            const result = await onLogin(email, password)
+            if (result && result.error) {
+                setShowAlert(true)
+                setAlertMessage(result.msg)
+                
+            }
+            else {
+                setShowAlert(false)
+                history.push('/dashboard')
+            }
+        } else {
+            console.log("onLogin broken")
         }
     }
 

@@ -73,16 +73,16 @@ const CalendarPage: React.FC = () => {
                 <IonContent className="ion-padding">
                     <IonList>
                         <IonItem>
-                            <IonInput label="Name" value={eventName} onIonInput={(event) => setEventName(event.detail.value)}></IonInput>
+                            <IonInput label="Name" value={eventName} onIonInput={(event) => setEventName((event.detail.value ?? '') as string)}></IonInput>
                         </IonItem>
                         <IonItem>
-                            <IonInput label="Type" value={eventType} onIonInput={(event) => setEventType(event.detail.value)}></IonInput>
+                            <IonInput label="Type" value={eventType} onIonInput={(event) => setEventType((event.detail.value ?? '') as string)}></IonInput>
                         </IonItem>
                         <IonItem>
-                            <IonInput label="Details" value={eventDetails} onIonInput={(event) => setEventDetails(event.detail.value)}></IonInput>
+                            <IonInput label="Details" value={eventDetails} onIonInput={(event) => setEventDetails((event.detail.value ?? '') as string)}></IonInput>
                         </IonItem>
                         <IonItem>
-                            <IonInput label="Location" value={eventLocation} onIonInput={(event) => setEventLocation(event.detail.value)}></IonInput>
+                            <IonInput label="Location" value={eventLocation} onIonInput={(event) => setEventLocation((event.detail.value ?? '') as string)}></IonInput>
                         </IonItem>
                         <IonItem>
                             <IonButton onClick={() => setIsStartTimeOpen(true)}>Start time</IonButton> <p style={{ marginLeft: 15 }}>{new Date(startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
@@ -94,7 +94,7 @@ const CalendarPage: React.FC = () => {
                             <IonButton onClick={() => setIsDateOpen(true)}>Date</IonButton> <p style={{ marginLeft: 15 }}>{new Date(eventDate).toLocaleString('en-US', { month: 'short', day: 'numeric' })}</p>
                         </IonItem>
                         <IonItem>
-                            <IonInput label="Code" value={verificationCode} onIonInput={(event) => setVerificationCode(event.detail.value)}></IonInput>
+                            <IonInput label="Code" value={verificationCode} onIonInput={(event) => setVerificationCode((event.detail.value ?? '') as string)}></IonInput>
                             <IonButton onClick={() => generateCode()}>Generate</IonButton>
                         </IonItem>    
                     </IonList>
@@ -103,17 +103,17 @@ const CalendarPage: React.FC = () => {
                 </IonContent>
                 <IonModal isOpen={isStartTimeOpen} initialBreakpoint={0.5} breakpoints={[0.5]} onDidDismiss={() => setIsStartTimeOpen(false)}>
                     <div className="center">
-                        <IonDatetime presentation="time" className="timedate" value={startTime} onIonChange={(event) => { setStartTime(event.detail.value) }}></IonDatetime>
+                        <IonDatetime presentation="time" className="timedate" value={startTime} onIonChange={(event) => { setStartTime((event.detail.value ?? '') as string) }}></IonDatetime>
                     </div>
                 </IonModal>
                 <IonModal isOpen={isEndTimeOpen} initialBreakpoint={0.5} breakpoints={[0.5]} onDidDismiss={() => setIsEndTimeOpen(false)}>
                     <div className="center">
-                        <IonDatetime presentation="time" className="timedate" value={endTime} onIonChange={(event) => { setEndTime(event.detail.value) }}></IonDatetime>
+                        <IonDatetime presentation="time" className="timedate" value={endTime} onIonChange={(event) => { setEndTime((event.detail.value ?? '') as string) }}></IonDatetime>
                     </div>
                 </IonModal>
                 <IonModal isOpen={isDateOpen} initialBreakpoint={0.5} breakpoints={[0.5]} onDidDismiss={() => setIsDateOpen(false)}>
                     <div className="center">
-                        <IonDatetime presentation="date" className="timedate" value={eventDate} onIonChange={(event) => { setEventDate(event.detail.value) }}></IonDatetime>
+                        <IonDatetime presentation="date" className="timedate" value={eventDate} onIonChange={(event) => { setEventDate((event.detail.value ?? '') as string) }}></IonDatetime>
                     </div>
                 </IonModal>
             </IonModal>

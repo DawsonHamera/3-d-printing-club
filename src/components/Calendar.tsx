@@ -5,16 +5,27 @@ import axios from "axios";
 import './Calendar.css'
 import { checkmarkCircle, trash } from "ionicons/icons";
 
-type CalendarProps = {
-    qrcode?: Boolean,
-    canDelete?: Boolean,
-    refresh?: Boolean,
+interface CalendarProps {
+    qrcode?: boolean;
+    canDelete?: boolean;
+    refresh?: boolean;
 }
 
-const Calendar: React.FC = (props: CalendarProps, refresh) => {
+interface Event {
+    event_id: string;
+    event_type: string;
+    event_name: string;
+    start_time: string;
+    end_time: string;
+    event_details: string;
+    event_date: string;
+    verification_code: string;
+}
+
+const Calendar: React.FC<CalendarProps> = ({ refresh }) => {
     const [loading, setLoading] = useState(true);
-    const [attendance, setAttendance] = useState([]);
-    const [events, setEvents] = useState([]);
+    const [attendance, setAttendance] = useState<string[]>([]);
+    const [events, setEvents] = useState<Event[]>([]);
     const { userState } = useAuth()
 
     const fetchData = async () => {
@@ -43,8 +54,8 @@ const Calendar: React.FC = (props: CalendarProps, refresh) => {
         }, [])
         , [refresh]);
 
-    const renderEvents = events.map((event) => (
-        <IonCard className="card">
+    const renderEvents = events.map((event: Event) => (
+        <IonCard className="card" key={event.event_id}>
             <IonGrid>
                 <IonRow>
                     <IonCol size="1" className="vertical-container">
