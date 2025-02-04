@@ -2,7 +2,6 @@ import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonProgressBar, IonRouterOut
 import { IonReactRouter } from "@ionic/react-router";
 import { personCircleOutline, calendarOutline, qrCodeOutline } from "ionicons/icons";
 import { Redirect, Route } from "react-router";
-import Tab2 from "./Tab2";
 import Tab3 from "./Tab3";
 import { useAuth } from "../../providers/AuthProvider";
 import Profile from "./Profile";
