@@ -1,7 +1,5 @@
 
-.card {
-    border-left: 6px solid var(--ion-color-primary);
-}
+
 .vertical {
     writing-mode: vertical-lr;
     /* text-orientation:upright; */
