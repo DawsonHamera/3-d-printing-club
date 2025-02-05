@@ -44,6 +44,7 @@ import './theme/variables.css';
 import SignIn from './pages/SignIn';
 import Dashboard from './pages/app/Dashboard';
 import { AuthProvider } from './providers/AuthProvider';
+import './main.css'
 
 setupIonicReact();
 

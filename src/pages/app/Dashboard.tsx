@@ -2,7 +2,7 @@ import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonProgressBar, IonRouterOut
 import { IonReactRouter } from "@ionic/react-router";
 import { personCircleOutline, calendarOutline, qrCodeOutline } from "ionicons/icons";
 import { Redirect, Route } from "react-router";
-import Tab3 from "./Tab3";
+import ScannerPage from "./ScannerPage";
 import { useAuth } from "../../providers/AuthProvider";
 import Profile from "./Profile";
 import CalendarPage from "./CalendarPage";
@@ -26,7 +26,7 @@ const Dashboard: React.FC = () => {
                     <CalendarPage />
                 </Route>
                 <Route path="/dashboard/tab3">
-                    <Tab3 />
+                    <ScannerPage />
                 </Route>
                 <Redirect exact path="/dashboard" to="/dashboard/profile" />
             </IonRouterOutlet>

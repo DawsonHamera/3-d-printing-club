@@ -1,10 +1,11 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonDatetime, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonModal, IonPage, IonProgressBar, IonRow, IonTitle, IonToolbar } from "@ionic/react"
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonDatetime, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonList, IonModal, IonPage, IonProgressBar, IonRow, IonTitle, IonToolbar } from "@ionic/react"
 import React, { useEffect, useState } from "react"
 import { useAuth } from "../providers/AuthProvider";
 import axios from "axios";
 import './Calendar.css'
 import { checkmarkCircle, trash } from "ionicons/icons";
 import { v4 as uuidv4 } from 'uuid';
+import QRCode from "react-qr-code";
 
 
 interface CalendarProps {
@@ -99,35 +100,55 @@ const Calendar: React.FC<CalendarProps> = ({ canEdit }) => {
         , []);
 
     const renderEvents = events.map((event: Event) => (
-        <IonCard className="card" key={event.event_id}>
-            <IonGrid>
-                <IonRow>
-                    <IonCol size="1" className="vertical-container">
-                        <p className="vertical">{event.event_type}</p>
-                    </IonCol>
-                    <IonCol>
-                        <IonCardHeader>
-                            <IonCardTitle>{event.event_name}</IonCardTitle>
-                            <IonCardSubtitle>
-                                {new Date(`1970-01-01T${event.start_time}Z`).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }) + " - "}
-                                {new Date(`1970-01-01T${event.end_time}Z`).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
-                            </IonCardSubtitle>
-                        </IonCardHeader>
+        <IonItemSliding>
+            <IonItem>
+                <IonCard className="card" key={event.event_id}>
+                    <IonGrid>
+                        <IonRow>
+                            <IonCol size="1" className="vertical-container">
+                                <p className="vertical">{event.event_type}</p>
+                            </IonCol>
+                            <IonCol>
+                                <IonCardHeader>
+                                    <IonCardTitle>{event.event_name}</IonCardTitle>
+                                    <IonCardSubtitle>
+                                        {new Date(`1970-01-01T${event.start_time}Z`).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }) + " - "}
+                                        {new Date(`1970-01-01T${event.end_time}Z`).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
+                                    </IonCardSubtitle>
+                                </IonCardHeader>
 
-                        <IonCardContent>
-                            {event.event_details}
-                        </IonCardContent></IonCol>
-                    <IonCol size="3">
-                        <div style={{ justifyItems: 'center' }}>
-                            <h4>{new Date(event.event_date).toLocaleString('en-US', { month: 'short', day: 'numeric' }).toUpperCase()}</h4>
-                            <IonIcon icon={checkmarkCircle} size="large"></IonIcon>
-                        </div>
-                        {canEdit && (<IonIcon icon={trash} size="small" style={{ float: "right", margin: 5 }} onClick={() => removeEvent(event.verification_code)}></IonIcon>)}
-                    </IonCol>
-                </IonRow>
-            </IonGrid>
+                                <IonCardContent>
+                                    {event.event_details}
+                                </IonCardContent>
+                            </IonCol>
 
-        </IonCard>
+                            <IonCol size="4">
+                                <div style={{ justifyItems: 'center' }}>
+                                    <h4>{new Date(event.event_date).toLocaleString('en-US', { month: 'short', day: 'numeric' }).toUpperCase()}</h4>
+                                    {userState?.role === 'admin' ? (
+                                        <QRCode
+                                            value={event.verification_code}
+                                            size={100}
+                                            bgColor="transparent"
+                                            fgColor="var(--ion-color-primary)"
+                                        />
+                                    ) : (
+                                        <IonIcon icon={checkmarkCircle} size="large"></IonIcon>
+                                    )}
+                                </div>
+                            </IonCol>
+                        </IonRow>
+                    </IonGrid>
+
+                </IonCard>
+            </IonItem>
+
+            <IonItemOptions side="end">
+                <IonItemOption color="danger">
+                    <IonIcon slot="icon-only" icon={trash}></IonIcon>
+                </IonItemOption>
+            </IonItemOptions>
+        </IonItemSliding>
     ))
 
     const editEvents = (
