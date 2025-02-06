@@ -53,12 +53,13 @@ const UserManagementPage: React.FC = () => {
             {users.map((user) => (
               <IonRow key={user.user_id}>
                 <IonCol>
-                  <IonCard>
-                    <IonCardHeader>
-                      <IonCardTitle>{user.username}</IonCardTitle>
+                <IonCard style={user.user_id === userState?.user_id ? { border: "2px solid var(--ion-color-primary)" } : {}}>
+                <IonCardHeader>
+                      <IonCardTitle style={user.user_id === userState?.user_id ? { color: " var(--ion-color-primary)" } : {}}>{user.user_id === userState?.user_id ? `${user.username} (you)` : user.username}</IonCardTitle>
                       <IonCardSubtitle>{user.email}</IonCardSubtitle>
                     </IonCardHeader>
                     <IonCardContent>
+                      <p><strong>Id:</strong> {user.user_id}</p>
                       <p><strong>Name:</strong> {user.first_name} {user.last_name}</p>
                       <p><strong>Role:</strong> {user.role}</p>
                       <p><strong>Grade:</strong> {user.grade}</p>

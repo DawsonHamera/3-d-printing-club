@@ -9,7 +9,7 @@ const getInitials = (firstName: any, lastName: any) => {
 };
 
 const ProfilePage: React.FC = () => {
-  const { userState } = useAuth()
+  const { userState, onLogout } = useAuth()
   const history = useHistory()
 
   return (
@@ -45,6 +45,7 @@ const ProfilePage: React.FC = () => {
             <h2>{userState?.firstName} {userState?.lastName}</h2>
             <p>{userState?.email}</p>
           </IonText>
+          {onLogout &&  <IonButton onClick={() => onLogout()}>Sign Out</IonButton>}
         </div>
 
         <IonCard>
@@ -67,7 +68,7 @@ const ProfilePage: React.FC = () => {
             <IonText>
               <p>The best way to learn 3D printing is getting hands on experience. Schedule time to come help with printer maintance, post-proccessing prints, and starting new prints!</p>
             </IonText>
-            <IonButton onClick={() => history.push("/dashboard/scanner")}>Schedule</IonButton>
+            <IonButton onClick={() => history.push("/dashboard/printer-jobs")}>Schedule</IonButton>
           </IonCardContent>
         </IonCard>
 

@@ -98,20 +98,23 @@ const Calendar: React.FC<CalendarProps> = ({ events, attendance, onAddEvent, onR
                                         <div style={{ justifyItems: 'center' }}>
                                             <h4>{new Date(event.event_date).toLocaleString('en-US', { month: 'short', day: 'numeric' }).toUpperCase()}</h4>
                                             {qrcode ? (
-                                                <QRCode
-                                                    value={event.verification_code}
-                                                    size={100}
-                                                // style={{border: '4px solid var(--ion-color-light-tint)'}}
-                                                // fgColor="var(--ion-color-light-tint)"
-                                                // bgColor="var(--ion-color-primary)"
-                                                />
+                                                <>
+                                                    <QRCode
+                                                        value={event.verification_code}
+                                                        size={100}
+                                                    // style={{border: '4px solid var(--ion-color-light-tint)'}}
+                                                    // fgColor="var(--ion-color-light-tint)"
+                                                    // bgColor="var(--ion-color-primary)"
+                                                    />
+                                                    <p>{event.verification_code}</p>
+                                                </>
                                             ) : (
                                                 (() => {
                                                     const eventDateTime = new Date(`${event.event_date}T${event.start_time}`);
                                                     const currentTime = new Date();
                                                     if (eventDateTime < currentTime && attendance.includes(event.event_id)) {
                                                         return <IonIcon icon={checkmarkCircle} size="large"></IonIcon>;
-                                                    } else if (attendance.includes(event.event_id)){
+                                                    } else if (attendance.includes(event.event_id)) {
                                                         return <IonIcon icon={ellipseOutline} size="large"></IonIcon>;
                                                     } else {
                                                         return ""
@@ -127,11 +130,13 @@ const Calendar: React.FC<CalendarProps> = ({ events, attendance, onAddEvent, onR
                         </IonCard>
                     </IonItem>
 
-                    <IonItemOptions side="end">
-                        <IonItemOption color="danger" onClick={() => handleRemoveEvent(event.event_id)}>
-                            <IonIcon slot="icon-only" icon={trash}></IonIcon>
-                        </IonItemOption>
-                    </IonItemOptions>
+                    {canEdit && (
+                        <IonItemOptions side="end">
+                            <IonItemOption color="danger" onClick={() => handleRemoveEvent(event.event_id)}>
+                                <IonIcon slot="icon-only" icon={trash}></IonIcon>
+                            </IonItemOption>
+                        </IonItemOptions>
+                    )}
                 </IonItemSliding>
             ))}
         </>
@@ -143,7 +148,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, attendance, onAddEvent, onR
             <IonModal isOpen={isOpen}>
                 <IonHeader>
                     <IonToolbar>
-                        <IonTitle>Modal</IonTitle>
+                        <IonTitle>Add Event</IonTitle>
                         <IonButtons slot="end">
                             <IonButton onClick={() => setIsOpen(false)}>Close</IonButton>
                         </IonButtons>
