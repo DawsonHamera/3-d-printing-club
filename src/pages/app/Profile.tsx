@@ -84,6 +84,18 @@ const ProfilePage: React.FC = () => {
           </IonCardContent>
         </IonCard>
 
+        <IonCard>
+          <IonCardHeader>
+            <IonCardTitle>Feedback</IonCardTitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <IonText>
+              <p>This app is still in the early stages of development, and full of bugs so any feedback is helpfull!</p>
+            </IonText>
+            <IonButton onClick={() => window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSfSAIqiTNboYb2rnVFLQPJLfkLnBNdwi_E6QPPGO_EzzJAcEA/viewform?usp=dialog"}>Feedback Form</IonButton>
+            </IonCardContent>
+        </IonCard>
+
       </IonContent>
     </IonPage>
   );
