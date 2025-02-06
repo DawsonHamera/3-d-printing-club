@@ -71,7 +71,7 @@ const Jobs: React.FC<JobsProps> = ({ jobs, attendance, onAddJob, onRemoveJob, lo
 
     const handleAssignToJob = async (jobId: any, assignedTo: string) => {
         if (assignedTo == "") {
-            const result = await assignJob(jobId, userState?.firstName+userState?.lastName)
+            const result = await assignJob(jobId, `${userState?.firstName ?? ''} ${userState?.lastName ?? ''}`)
             console.log(result)
         } 
     }
@@ -81,7 +81,7 @@ const Jobs: React.FC<JobsProps> = ({ jobs, attendance, onAddJob, onRemoveJob, lo
             {Array.isArray(jobs) && jobs.length > 0 ? (
                 jobs.map((job: PrintJob) => {
                     var color = "var(--ion-color-primary)";
-                    if (job.assigned_to === userState?.firstName+userState?.lastName) {
+                    if (job.assigned_to === `${userState?.firstName ?? ''} ${userState?.lastName ?? ''}`) {
                         color = "var(--ion-color-success)"; // Set color for the left border
                     }
                     return (
@@ -129,7 +129,7 @@ const Jobs: React.FC<JobsProps> = ({ jobs, attendance, onAddJob, onRemoveJob, lo
                                                 >
                                                     {job.assigned_to ? getInitials(job.assigned_to) : "+"}
                                                 </IonAvatar>
-                                                <p style={{ textAlign: 'center' }}>{job.assigned_to === userState?.firstName+userState?.lastName ? "You":job.assigned_to}</p>
+                                                <p style={{ textAlign: 'center' }}>{job.assigned_to === `${userState?.firstName ?? ''} ${userState?.lastName ?? ''}` ? "You":job.assigned_to}</p>
                                             </IonCol>
                                         </IonRow>
                                     </IonGrid>
