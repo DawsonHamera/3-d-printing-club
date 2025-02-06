@@ -11,7 +11,6 @@ import ApiService from "../services/ApiService";
 interface JobsProps {
     canEdit?: boolean;
     jobs: any[];  // List of events from parent
-    attendance: any[];
     onAddJob: (newEvent: any) => void;  // Parent function to add event
     onRemoveJob: (eventId: string) => void;  // Parent function to remove event
     loading: boolean;  // Loading state from parent
@@ -26,16 +25,27 @@ interface PrintJob {
     link: string;
     assigned_to: string;
 }
+interface User {
+    user_id: number,
+    username: string,
+    email: string,
+    first_name: string,
+    last_name: string,
+    role: string,
+    grade: string,
+    score: number,
+    created_at: string
+}
 
-const Jobs: React.FC<JobsProps> = ({ jobs, attendance, onAddJob, onRemoveJob, loading, canEdit }) => {
+const Jobs: React.FC<JobsProps> = ({ jobs, onAddJob, onRemoveJob, loading, canEdit }) => {
     const [isMainModalOpen, setIsMainModalOpen] = useState(false); // Modal for adding job
     const [isDateOpen, setIsDateOpen] = useState(false); // Modal for date picker
     const [isTimeOpen, setIsTimeOpen] = useState(false); // Modal for time picker
-    const [jobDate, setJobDate] = useState<string>("");
+    const [jobDate, setJobDate] = useState<any>("");
     const [assignedTo, setAssignedTo] = useState<string>("");
-    const [jobTime, setJobTime] = useState<string>("");
+    const [jobTime, setJobTime] = useState<any>("");
     const [printer, setPrinter] = useState("");
-    const [users, setUsers] = useState([])
+    const [users, setUsers] = useState<User[]>([])
     const [item, setItem] = useState("");
     const [link, setLink] = useState("");
 

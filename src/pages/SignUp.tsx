@@ -172,7 +172,6 @@ const SignUp: React.FC = () => {
                         value={grade}
                         placeholder="Select your grade"
                         onIonChange={(e) => setGrade(e.detail.value)}
-                        required
                         className={gradeMissing ? 'ion-invalid' : 'ion-valid'}
                     >
                         <IonSelectOption value="freshman">Freshman</IonSelectOption>
