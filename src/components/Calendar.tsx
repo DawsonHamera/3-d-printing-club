@@ -74,7 +74,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, attendance, onAddEvent, onR
             {events.map((event: Event) => (
                 <IonItemSliding key={event.event_id}>
                     <IonItem >
-                        <IonCard style={{ borderLeft: `6px solid ${color}` /*backgroundColor: "var(--ion-color-light-shade)"*/ }}>
+                        <IonCard style={{ borderLeft: `6px solid ${color}`, width: '100%' }}>
                             <IonGrid>
                                 <IonRow>
                                     <IonCol size="1" className="vertical-container">
