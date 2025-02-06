@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react"
 import { useAuth } from "../providers/AuthProvider";
 import axios from "axios";
 import './Calendar.css'
-import { checkmarkCircle, trash } from "ionicons/icons";
+import { checkmarkCircle, ellipseOutline, trash } from "ionicons/icons";
 import { v4 as uuidv4 } from 'uuid';
 import QRCode from "react-qr-code";
 
@@ -74,7 +74,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, attendance, onAddEvent, onR
             {events.map((event: Event) => (
                 <IonItemSliding key={event.event_id}>
                     <IonItem >
-                        <IonCard style={{borderLeft: `6px solid ${color}` /*backgroundColor: "var(--ion-color-light-shade)"*/}}>
+                        <IonCard style={{ borderLeft: `6px solid ${color}` /*backgroundColor: "var(--ion-color-light-shade)"*/ }}>
                             <IonGrid>
                                 <IonRow>
                                     <IonCol size="1" className="vertical-container">
@@ -101,13 +101,25 @@ const Calendar: React.FC<CalendarProps> = ({ events, attendance, onAddEvent, onR
                                                 <QRCode
                                                     value={event.verification_code}
                                                     size={100}
-                                                    bgColor="transparent"
-                                                    fgColor="var(--ion-color-primary)"
+                                                // style={{border: '4px solid var(--ion-color-light-tint)'}}
+                                                // fgColor="var(--ion-color-light-tint)"
+                                                // bgColor="var(--ion-color-primary)"
                                                 />
                                             ) : (
-                                                <IonIcon icon={checkmarkCircle} size="large"></IonIcon>
+                                                (() => {
+                                                    const eventDateTime = new Date(`${event.event_date}T${event.start_time}`);
+                                                    const currentTime = new Date();
+                                                    if (eventDateTime < currentTime && attendance.includes(event.event_id)) {
+                                                        return <IonIcon icon={checkmarkCircle} size="large"></IonIcon>;
+                                                    } else if (attendance.includes(event.event_id)){
+                                                        return <IonIcon icon={ellipseOutline} size="large"></IonIcon>;
+                                                    } else {
+                                                        return ""
+                                                    }
+                                                })()
                                             )}
                                         </div>
+
                                     </IonCol>
                                 </IonRow>
                             </IonGrid>
@@ -122,7 +134,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, attendance, onAddEvent, onR
                     </IonItemOptions>
                 </IonItemSliding>
             ))}
-            </>
+        </>
     )
 
     const editEvents = (
@@ -190,14 +202,38 @@ const Calendar: React.FC<CalendarProps> = ({ events, attendance, onAddEvent, onR
     if (loading) {
         return <IonProgressBar type="indeterminate"></IonProgressBar>;
     }
+
+    const finalEvents = () => {
+        if (attendance.length > 0) {
+            if (other.length > 0) {
+                return (
+                    <>
+                        <h3 className="center">Attended</h3>
+                        {renderEvents(attending, "var(--ion-color-success)")}
+                        <h3 className="center">Other</h3>
+                        {renderEvents(other, "var(--ion-color-primary)")}
+                    </>
+                )
+            } else {
+                return (
+                    <>
+                        <h3 className="center">Attended</h3>
+                        {renderEvents(attending, "var(--ion-color-success)")}
+                    </>
+                )
+            }
+
+
+        } else {
+            return renderEvents(other, "var(--ion-color-primary)")
+        }
+    }
+
     return (
         <div>
             {canEdit && editEvents}
             <IonList lines="none">
-            <h3 className="center">Attending</h3>
-            {renderEvents(attending, "var(--ion-color-success)")}
-            <h3 className="center">Other</h3>
-            {renderEvents(other, "var(--ion-color-primary)")}
+                {finalEvents()}
             </IonList>
         </div>
     )

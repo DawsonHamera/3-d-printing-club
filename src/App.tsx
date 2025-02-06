@@ -45,6 +45,7 @@ import SignIn from './pages/SignIn';
 import Dashboard from './pages/app/Dashboard';
 import { AuthProvider } from './providers/AuthProvider';
 import './main.css'
+import SignUp from './pages/SignUp';
 
 setupIonicReact();
 
@@ -55,6 +56,9 @@ const App: React.FC = () => (
         <IonRouterOutlet>
           <Route exact path="/sign-in">
             <SignIn />
+          </Route>
+          <Route exact path="/signup">
+            <SignUp />
           </Route>
           <Route path="/dashboard">
             <Dashboard />

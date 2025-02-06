@@ -1,14 +1,15 @@
 import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonProgressBar, IonRouterOutlet } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { personCircleOutline, calendarOutline, qrCodeOutline } from "ionicons/icons";
+import { personCircleOutline, calendarOutline, qrCodeOutline, peopleCircle, peopleCircleOutline } from "ionicons/icons";
 import { Redirect, Route } from "react-router";
 import ScannerPage from "./ScannerPage";
 import { useAuth } from "../../providers/AuthProvider";
-import Profile from "./Profile";
+import ProfilePage from "./Profile";
 import CalendarPage from "./CalendarPage";
+import UserManagementPage from "./UserManagment";
 
 const Dashboard: React.FC = () => {
-    const { authState, isLoading } = useAuth();
+    const { authState, userState, isLoading } = useAuth();
     if (!isLoading && !authState?.authenticated) {
         console.log("Need to auth");
         return <Redirect to="/sign-in" />;
@@ -20,13 +21,16 @@ const Dashboard: React.FC = () => {
         <IonTabs>
             <IonRouterOutlet>
                 <Route exact path="/dashboard/profile">
-                    <Profile />
+                    <ProfilePage />
                 </Route>
                 <Route path="/dashboard/calendar">
                     <CalendarPage />
                 </Route>
-                <Route path="/dashboard/tab3">
+                <Route path="/dashboard/scanner">
                     <ScannerPage />
+                </Route>
+                <Route path="/dashboard/user-management">
+                    <UserManagementPage />
                 </Route>
                 <Redirect exact path="/dashboard" to="/dashboard/profile" />
             </IonRouterOutlet>
@@ -37,9 +41,14 @@ const Dashboard: React.FC = () => {
                 <IonTabButton tab="tab2" href="/dashboard/calendar">
                     <IonIcon aria-hidden="true" icon={calendarOutline} />
                 </IonTabButton>
-                <IonTabButton tab="tab3" href="/dashboard/tab3">
+                <IonTabButton tab="tab3" href="/dashboard/scanner">
                     <IonIcon aria-hidden="true" icon={qrCodeOutline} />
                 </IonTabButton>
+                {userState?.role === 'admin' && (
+                    <IonTabButton tab="tab4" href="/dashboard/user-management">
+                        <IonIcon aria-hidden="true" icon={peopleCircleOutline} />
+                    </IonTabButton>
+                )}
             </IonTabBar>
         </IonTabs>
     );

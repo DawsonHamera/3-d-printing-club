@@ -38,8 +38,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         token: null,
         authenticated: null
     });
-    const [userState, setUserState] = useState<{ user_id: string | null; firstName: string | null; lastName: string | null; role: string | null }>({
+    const [userState, setUserState] = useState<{ user_id: string | null; email: string | null; firstName: string | null; lastName: string | null; role: string | null }>({
         user_id: null,
+        email: null,
         firstName: null,
         lastName: null,
         role: null
@@ -53,7 +54,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                     const tokenPayload = parseJwt(token);
                     setAuthState({ token: token, authenticated: true });
-                    setUserState({ user_id: tokenPayload.user_id, firstName: tokenPayload.first_name, lastName: tokenPayload.last_name, role: tokenPayload.role });
+                    setUserState({ user_id: tokenPayload.user_id, email: tokenPayload.email, firstName: tokenPayload.first_name, lastName: tokenPayload.last_name, role: tokenPayload.role });
                 }
             } catch (e) {
                 console.error("Error loading token", e);
@@ -84,7 +85,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             }
             const tokenPayload = parseJwt(result.data.jwt);
             setAuthState({ token: result.data.jwt, authenticated: true });
-            setUserState({ user_id: tokenPayload.user_id, firstName: tokenPayload.first_name, lastName: tokenPayload.last_name, role: tokenPayload.role });
+            setUserState({ user_id: tokenPayload.user_id, email: tokenPayload.email, firstName: tokenPayload.first_name, lastName: tokenPayload.last_name, role: tokenPayload.role });
             axios.defaults.headers.common['Token'] = `Bearer ${result.data.jwt}`;
             localStorage.setItem(TOKEN_KEY, result.data.jwt);
         } catch (e: any) {

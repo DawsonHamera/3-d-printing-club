@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Calendar from '../../components/Calendar';
 import { useAuth } from '../../providers/AuthProvider';
-import { IonContent, IonRefresher, IonRefresherContent, RefresherEventDetail } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonRefresher, IonRefresherContent, IonTitle, IonToolbar, RefresherEventDetail } from '@ionic/react';
 
-const ParentComponent: React.FC = () => {
+const CalendarPage: React.FC = () => {
     const [attendance, setAttendance] = useState([]);
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -17,17 +17,19 @@ const ParentComponent: React.FC = () => {
     }, []);
 
     const fetchEvents = async () => {
-        console.log('events fetched')
         setLoading(true);
         try {
             const events = await axios.get('https://dawson.hamera.com/api/get_events.php');
             const attendance = await axios.post("https://dawson.hamera.com/api/get_attendance.php", { user_id: userState?.user_id });
             setEvents(events.data);
             setAttendance(attendance.data)
+            console.log('events fetched')
+
         } catch (error) {
             console.error("Error fetching events:", error);
         } finally {
             setLoading(false);
+            console.log("done")
         }
     };
 
@@ -58,25 +60,30 @@ const ParentComponent: React.FC = () => {
 
     async function handleRefresh(event: CustomEvent<RefresherEventDetail>) {
         await fetchEvents()
-          event.detail.complete();
-      }
+        event.detail.complete();
+    }
 
     return (
-        <IonContent>
-            <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
-                <IonRefresherContent></IonRefresherContent>
-            </IonRefresher>
-            <Calendar
-                attendance={attendance}
-                events={events}
-                onAddEvent={handleAddEvent}
-                onRemoveEvent={handleRemoveEvent}
-                loading={loading}
-                canEdit={userState?.role === 'admin'}
-                qrcode={userState?.role === 'admin'}
-            />
-        </IonContent>
+        <IonPage>
+            <IonContent>
+                <IonToolbar>
+                    <IonTitle>Calendar</IonTitle>
+                </IonToolbar>
+                <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+                    <IonRefresherContent></IonRefresherContent>
+                </IonRefresher>
+                <Calendar
+                    attendance={attendance}
+                    events={events}
+                    onAddEvent={handleAddEvent}
+                    onRemoveEvent={handleRemoveEvent}
+                    loading={loading}
+                    canEdit={userState?.role === 'admin'}
+                    qrcode={userState?.role === 'admin'}
+                />
+            </IonContent>
+        </IonPage>
     );
 };
 
-export default ParentComponent;
+export default CalendarPage;

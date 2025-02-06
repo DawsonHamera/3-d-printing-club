@@ -1,9 +1,9 @@
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import './Tab3.css';
+import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonContent, IonHeader, IonIcon, IonPage, IonText, IonTitle, IonToolbar } from '@ionic/react';
 import QRCodeScanner from '../../components/QRCodeScanner';
 import { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../providers/AuthProvider';
+import { alertCircle, alertCircleSharp, checkmarkCircle } from 'ionicons/icons';
 
 const ScannerPage: React.FC = () => {
   const [isScanned, setIsScanned] = useState(false);
@@ -17,10 +17,8 @@ const ScannerPage: React.FC = () => {
     verifyCode(text)
   };
 
-  const verifyCode = async ( data: string ) => {
+  const verifyCode = async (data: string) => {
     const response = await axios.post("https://dawson.hamera.com/api/attendance.php", { user_id: userState?.user_id, verification_code: data })
-    console.log(response.data)
-    console.log(data)
     if (!response.data.error) {
       setIsError(false)
       setMessage(response.data.event_name)
@@ -41,9 +39,23 @@ const ScannerPage: React.FC = () => {
       </IonHeader>
       <IonContent>
         <QRCodeScanner onScan={handleScan} />
-        {isScanned && (
-          <h4 className='center'>You have successfully registered for {message}</h4>
-        )}
+        <div className='ion-padding'>
+
+          {(isScanned && isError === false) && (
+            <>
+              <IonIcon icon={checkmarkCircle} size="large" style={{ textAlign: 'center', width: '100%' }} />
+              <h4>You have successfully registered for</h4>
+              <p> {message}</p>
+            </>
+          )}
+          {(isScanned && isError === true) && (
+            <>
+              <IonIcon icon={alertCircle} size="large" style={{ textAlign: 'center', width: '100%' }} />
+              <h4>There was an error scanning the code:</h4>
+              <p> {message}</p>
+            </>
+          )}
+        </div>
       </IonContent>
     </IonPage>
   );
