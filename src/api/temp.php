@@ -1,6 +1,7 @@
 <?php
-include 'db.php';
+include 'auth.php';
 // Get all table names from the database
+if ($auth_level === 'admin') {
 $sql = "SHOW TABLES";
 $result = $conn->query($sql);
 
@@ -26,6 +27,7 @@ if ($result->num_rows > 0) {
 } else {
     echo "No tables found in the database";
 }
-
+}
 $conn->close();
+
 ?>

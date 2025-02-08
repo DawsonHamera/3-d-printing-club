@@ -9,18 +9,19 @@ if ($auth_level === 'admin') {
         $data = json_decode($input, true);
 
         if ($data) {
-            $event_id = $data['event_id'];
-            // Proceed to delete the event
-            $stmt = $conn->prepare("DELETE FROM events WHERE event_id=?");
-            $stmt->bind_param("s", $event_id);
+            $user_id = $data['user_id'];
+            $role = $data['role'];
+
+            // Proceed to assign the job
+            $stmt = $conn->prepare("UPDATE users SET role=? WHERE user_id=?");
+            $stmt->bind_param("ss", $role, $user_id);
 
             if ($stmt->execute()) {
-                echo json_encode(["message" => "Event deleted successfully."]);
+                echo json_encode(["message" => "Role updated successfully."]);
             } else {
-                echo json_encode(["message" => "Failed to delete event."]);
+                echo json_encode(["message" => "Failed to update role."]);
             }
-          
-        
+
             $stmt->close();
         } else {
             echo json_encode(["message" => "Invalid JSON input."]);

@@ -1,7 +1,6 @@
 <?php
 // include 'auth.php';
-include 'db.php';
-$auth_level = 'admin';
+include 'auth.php';
 
 if ($auth_level === 'admin') {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {

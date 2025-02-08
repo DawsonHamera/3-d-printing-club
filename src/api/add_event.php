@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+include 'auth.php';
 $auth_level = 'admin';
 
 if ($auth_level === 'admin') {

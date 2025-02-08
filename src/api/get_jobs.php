@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+include 'auth.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // SQL query to fetch print jobs from your database

@@ -5,7 +5,7 @@ include('db.php');  // Adjust the path if necessary
 header("Content-Type: application/json");
 
 // Secret key for encoding and decoding the JWT (should be stored securely)
-$secret_key = "your_secret_key_here";  // Change this to a secure random string
+$secret_key = "Mh.B<^(rej9ezHRykXcz6v(*Qlo&R'";  // Change this to a secure random string
 
 // Function to create a JWT
 function create_jwt($payload, $secret_key) {

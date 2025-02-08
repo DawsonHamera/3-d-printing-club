@@ -1,9 +1,14 @@
 <?php
-header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+$http_origin = $_SERVER['HTTP_ORIGIN'];
+
+if ($http_origin == "http://dawson.hamera.com" || $http_origin == "http://localhost:8100")
+{  
+    header("Access-Control-Allow-Origin: $http_origin");
+}
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 
 // Allow headers for preflight requests
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Headers: Content-Type, Token");
 
 // Set content type to JSON
 // header("Content-Type: application/json");

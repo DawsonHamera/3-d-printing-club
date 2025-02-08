@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+include 'auth.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the JSON input

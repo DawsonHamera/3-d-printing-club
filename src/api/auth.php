@@ -1,6 +1,6 @@
 <?php
-$secret_key = "your_secret_key_here";
-header("Access-Control-Allow-Headers: Authorization, Token");
+include 'db.php';
+$secret_key = "Mh.B<^(rej9ezHRykXcz6v(*Qlo&R'";
 
 function base64UrlDecode($data) {
     return base64_decode(strtr($data, '-_', '+/'));

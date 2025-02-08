@@ -189,7 +189,7 @@ const SignUp: React.FC = () => {
                 <IonFooter className="ion-no-border">
                     <IonText color="medium">
                         <p style={{ textAlign: 'center', marginTop: '20px' }}>
-                            Already have an account? <a href="/signin">Sign in</a>
+                            Already have an account? <a href="/sign-in">Sign in</a>
                         </p>
                     </IonText>
                 </IonFooter>

@@ -1,9 +1,7 @@
 <?php
 // include 'auth.php';
-include 'db.php';
-$auth_level = 'admin';
+include 'auth.php';
 
-if ($auth_level === 'admin') {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Get the JSON input
         $input = file_get_contents('php://input');
@@ -28,5 +26,4 @@ if ($auth_level === 'admin') {
             echo json_encode(["message" => "Invalid JSON input."]);
         }
     }
-}
 ?>
