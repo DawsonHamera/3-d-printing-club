@@ -3,6 +3,7 @@ import axios from 'axios';
 import Calendar from '../../components/Calendar';
 import { useAuth } from '../../providers/AuthProvider';
 import { IonContent, IonHeader, IonPage, IonRefresher, IonRefresherContent, IonTitle, IonToolbar, RefresherEventDetail } from '@ionic/react';
+import ApiService from '../../services/ApiService';
 
 const CalendarPage: React.FC = () => {
     const [attendance, setAttendance] = useState([]);
@@ -10,6 +11,8 @@ const CalendarPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
 
     const { userState } = useAuth()
+    const { apiFetch, apiPost, apiLoading } = ApiService()
+
 
     // Fetch events when the component mounts
     useEffect(() => {
@@ -17,26 +20,20 @@ const CalendarPage: React.FC = () => {
     }, []);
 
     const fetchEvents = async () => {
-        setLoading(true);
         try {
-            const events = await axios.get('https://dawson.hamera.com/api/get_events.php');
-            const attendance = await axios.post("https://dawson.hamera.com/api/get_attendance.php", { user_id: userState?.user_id });
+            const events = await apiFetch('get_events');
+            const attendance = await apiPost('get_attendance', { user_id: userState?.user_id });
             setEvents(events.data);
             setAttendance(attendance.data)
-            console.log('events fetched')
-
         } catch (error) {
             console.error("Error fetching events:", error);
-        } finally {
-            setLoading(false);
-            console.log("done")
         }
     };
 
     const handleAddEvent = async (newEvent: any) => {
         try {
             // Send the new event data to your backend
-            await axios.post('https://dawson.hamera.com/api/add_event.php', newEvent);
+            await apiPost('add_event', newEvent);
 
             // After adding, refresh the events
             fetchEvents();
@@ -46,10 +43,9 @@ const CalendarPage: React.FC = () => {
     };
 
     const handleRemoveEvent = async (eventId: string) => {
-        console.log("removing 2...")
         try {
             // Send the request to delete the event
-            await axios.post('https://dawson.hamera.com/api/remove_event.php', { event_id: eventId });
+            await apiPost('remove_event', { event_id: eventId });
 
             // After deleting, refresh the events
             fetchEvents();
@@ -77,7 +73,7 @@ const CalendarPage: React.FC = () => {
                     events={events}
                     onAddEvent={handleAddEvent}
                     onRemoveEvent={handleRemoveEvent}
-                    loading={loading}
+                    loading={apiLoading}
                     canEdit={userState?.role === 'admin'}
                     qrcode={userState?.role === 'admin'}
                 />

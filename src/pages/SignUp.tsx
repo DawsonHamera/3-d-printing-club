@@ -91,7 +91,7 @@ const SignUp: React.FC = () => {
                         type="text"
                         placeholder="Enter your first name"
                         value={firstName}
-                        onIonChange={(e) => setFirstName(e.detail.value!)}
+                        onIonInput={(e) => setFirstName(e.detail.value!)}
                         required
                         className={firstNameMissing ? 'ion-invalid' : 'ion-valid'}
                     />
@@ -106,7 +106,7 @@ const SignUp: React.FC = () => {
                         type="text"
                         placeholder="Enter your last name"
                         value={lastName}
-                        onIonChange={(e) => setLastName(e.detail.value!)}
+                        onIonInput={(e) => setLastName(e.detail.value!)}
                         required
                         className={lastNameMissing ? 'ion-invalid' : 'ion-valid'}
                     />
@@ -121,7 +121,7 @@ const SignUp: React.FC = () => {
                         type="email"
                         placeholder="Enter your email"
                         value={email}
-                        onIonChange={(e) => setEmail(e.detail.value!)}
+                        onIonInput={(e) => setEmail(e.detail.value!)}
                         required
                         className={emailMissing || emailInvalid ? 'ion-invalid' : 'ion-valid'}
                     />
@@ -139,7 +139,7 @@ const SignUp: React.FC = () => {
                         type="password"
                         placeholder="Enter your password"
                         value={password}
-                        onIonChange={(e) => setPassword(e.detail.value!)}
+                        onIonInput={(e) => setPassword(e.detail.value!)}
                         required
                         className={passwordMissing ? 'ion-invalid' : 'ion-valid'}
                     />
@@ -154,7 +154,7 @@ const SignUp: React.FC = () => {
                         type="password"
                         placeholder="Verify your password"
                         value={passwordVerify}
-                        onIonChange={(e) => setPasswordVerify(e.detail.value!)}
+                        onIonInput={(e) => setPasswordVerify(e.detail.value!)}
                         required
                         className={passwordVerifyMissing || passwordMismatch ? 'ion-invalid' : 'ion-valid'}
                     />
@@ -171,7 +171,7 @@ const SignUp: React.FC = () => {
                     <IonSelect
                         value={grade}
                         placeholder="Select your grade"
-                        onIonChange={(e) => setGrade(e.detail.value)}
+                        onIonInput={(e) => setGrade(e.detail.value)}
                         required
                         className={gradeMissing ? 'ion-invalid' : 'ion-valid'}
                     >

@@ -11,7 +11,6 @@ import ApiService from "../services/ApiService";
 interface JobsProps {
     canEdit?: boolean;
     jobs: any[];  // List of events from parent
-    attendance: any[];
     onAddJob: (newEvent: any) => void;  // Parent function to add event
     onRemoveJob: (eventId: string) => void;  // Parent function to remove event
     loading: boolean;  // Loading state from parent
@@ -26,16 +25,27 @@ interface PrintJob {
     link: string;
     assigned_to: string;
 }
+interface User {
+    user_id: number,
+    username: string,
+    email: string,
+    first_name: string,
+    last_name: string,
+    role: string,
+    grade: string,
+    score: number,
+    created_at: string
+}
 
-const Jobs: React.FC<JobsProps> = ({ jobs, attendance, onAddJob, onRemoveJob, loading, canEdit }) => {
+const Jobs: React.FC<JobsProps> = ({ jobs, onAddJob, onRemoveJob, loading, canEdit }) => {
     const [isMainModalOpen, setIsMainModalOpen] = useState(false); // Modal for adding job
     const [isDateOpen, setIsDateOpen] = useState(false); // Modal for date picker
     const [isTimeOpen, setIsTimeOpen] = useState(false); // Modal for time picker
-    const [jobDate, setJobDate] = useState<string>("");
+    const [jobDate, setJobDate] = useState<any>("");
     const [assignedTo, setAssignedTo] = useState<string>("");
-    const [jobTime, setJobTime] = useState<string>("");
+    const [jobTime, setJobTime] = useState<any>("");
     const [printer, setPrinter] = useState("");
-    const [users, setUsers] = useState([])
+    const [users, setUsers] = useState<User[]>([])
     const [item, setItem] = useState("");
     const [link, setLink] = useState("");
 
@@ -43,7 +53,7 @@ const Jobs: React.FC<JobsProps> = ({ jobs, attendance, onAddJob, onRemoveJob, lo
     const [errorMessage, setErrorMessage] = useState("");
 
     const { userState } = useAuth();
-    const { fetchUsers, assignJob, apiLoading } = ApiService()
+    const { apiFetch, apiPost, apiLoading } = ApiService()
 
     const handleAddJob = () => {
         // Call the parent’s onAddJob function to add the event
@@ -71,8 +81,7 @@ const Jobs: React.FC<JobsProps> = ({ jobs, attendance, onAddJob, onRemoveJob, lo
 
     const handleAssignToJob = async (jobId: any, assignedTo: string) => {
         if (assignedTo == "") {
-            const result = await assignJob(jobId, `${userState?.firstName ?? ''} ${userState?.lastName ?? ''}`)
-            console.log(result)
+            await apiPost('assign_job',{job_id:jobId, username:`${userState?.firstName ?? ''} ${userState?.lastName ?? ''}`})
         } 
     }
 
@@ -109,7 +118,7 @@ const Jobs: React.FC<JobsProps> = ({ jobs, attendance, onAddJob, onRemoveJob, lo
 
                                             <IonCol size="4">
                                                 <div style={{ justifyItems: 'center' }}>
-                                                    <h4>{new Date(job.job_date).toLocaleString('en-US', { month: 'short', day: 'numeric' }).toUpperCase()}</h4>
+                                                    <h4>{new Date(new Date(job.job_date).setDate(new Date(job.job_date).getDate() + 1)).toLocaleString('en-US', { month: 'short', day: 'numeric' }).toUpperCase()}</h4>
                                                 </div>
 
                                                 <IonAvatar
@@ -197,8 +206,8 @@ const Jobs: React.FC<JobsProps> = ({ jobs, attendance, onAddJob, onRemoveJob, lo
                                 placeholder="none"
                                 onIonChange={(e) => setAssignedTo(e.detail.value!)}
                                 onIonFocus={async () => {
-                                    const data = await fetchUsers();
-                                    setUsers(data);
+                                    const data = await apiFetch('get_users');
+                                    setUsers(data.data);
 
                                 }}
                             >

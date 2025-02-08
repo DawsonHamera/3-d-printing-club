@@ -18,13 +18,13 @@ function parseJwt(token: string): { [key: string]: any } {
 interface AuthProps {
     isLoading?: boolean;
     authState?: { token: string | null; authenticated: boolean | null };
-    userState?: { user_id: string | null; firstName: string | null; lastName: string | null; role: string | null };
+    userState?: { user_id: number | null; firstName: string | null; lastName: string | null; role: string | null };
     onRegister?: (first_name: string, last_name: string, email: string, password: string, grade: string) => Promise<any>;
     onLogin?: (email: string, password: string) => Promise<any>;
     onLogout?: () => Promise<void>;
 }
 
-const TOKEN_KEY = 'my-jwt';
+const TOKEN_KEY = 'jwt';
 export const API_URL = 'https://dawson.hamera.com/api';
 const AuthContext = createContext<AuthProps>({});
 
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             try {
                 const token = localStorage.getItem(TOKEN_KEY);
                 if (token) {
-                    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+                    axios.defaults.headers.common['Token'] = `Bearer ${token}`;
                     const tokenPayload = parseJwt(token);
                     setAuthState({ token: token, authenticated: true });
                     setUserState({ user_id: tokenPayload.user_id, email: tokenPayload.email, firstName: tokenPayload.first_name, lastName: tokenPayload.last_name, role: tokenPayload.role });
@@ -79,10 +79,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const login = useCallback(async (email: string, password: string) => {
         try {
+            console.log("Attempting to login")
             const result = await axios.post(`${API_URL}/login.php`, { email, password });
             if (result.data.error) {
+                console.log("Login failed:",result.data.error)
                 return { error: true, msg: result.data.error };
             }
+            console.log("Login success")
             const tokenPayload = parseJwt(result.data.jwt);
             setAuthState({ token: result.data.jwt, authenticated: true });
             setUserState({ user_id: tokenPayload.user_id, email: tokenPayload.email, firstName: tokenPayload.first_name, lastName: tokenPayload.last_name, role: tokenPayload.role });
@@ -96,7 +99,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const logout = useCallback(async () => {
         console.log("logging out...")
         localStorage.removeItem(TOKEN_KEY);
-        delete axios.defaults.headers.common['Authorization'];
+        delete axios.defaults.headers.common['Token'];
         setAuthState({ token: null, authenticated: false });
     }, []);
 

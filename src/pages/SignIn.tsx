@@ -34,14 +34,13 @@ const SignIn: React.FC = () => {
         <IonPage>
             <IonContent className="ion-padding">
                 <h1>Sign In</h1>
-
                 <IonItem>
                     <IonLabel position="stacked">Email</IonLabel>
                     <IonInput
                         type="email"
                         placeholder="Enter your email"
                         value={email}
-                        onIonChange={(e) => setEmail(e.detail.value!)}
+                        onIonInput={(e) => setEmail(e.detail.value!)}
                         required
                     />
                 </IonItem>
@@ -52,7 +51,7 @@ const SignIn: React.FC = () => {
                         type="password"
                         placeholder="Enter your password"
                         value={password}
-                        onIonChange={(e) => setPassword(e.detail.value!)}
+                        onIonInput={(e) => setPassword(e.detail.value!)}
                         required
                     />
                 </IonItem>

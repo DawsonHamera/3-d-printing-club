@@ -54,14 +54,11 @@ const Calendar: React.FC<CalendarProps> = ({ events, attendance, onAddEvent, onR
     }
 
     const handleAddEvent = () => {
-        // Call the parent’s onAddEvent function to add the event
         onAddEvent({ event_name: eventName, event_type: eventType, event_details: eventDetails, event_location: eventLocation, scheduled_by: `${userState?.firstName} ${userState?.lastName}`, verification_code: verificationCode, event_date: eventDate, start_time: startTime, end_time: endTime });
         setIsOpen(false);  // Close modal after adding
     };
 
     const handleRemoveEvent = (eventId: string) => {
-        console.log("removing 1...")
-        // Call the parent’s onRemoveEvent function to remove the event
         onRemoveEvent(eventId);
     };
 
@@ -74,7 +71,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, attendance, onAddEvent, onR
             {events.map((event: Event) => (
                 <IonItemSliding key={event.event_id}>
                     <IonItem >
-                        <IonCard style={{ borderLeft: `6px solid ${color}` /*backgroundColor: "var(--ion-color-light-shade)"*/ }}>
+                        <IonCard style={{ borderLeft: `6px solid ${color}`, width: '100%' /*backgroundColor: "var(--ion-color-light-shade)"*/ }}>
                             <IonGrid>
                                 <IonRow>
                                     <IonCol size="1" className="vertical-container">

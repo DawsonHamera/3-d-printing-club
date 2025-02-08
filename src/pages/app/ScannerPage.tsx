@@ -4,12 +4,14 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../providers/AuthProvider';
 import { alertCircle, alertCircleSharp, checkmarkCircle } from 'ionicons/icons';
+import ApiService from '../../services/ApiService';
 
 const ScannerPage: React.FC = () => {
   const [isScanned, setIsScanned] = useState(false);
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
   const { userState } = useAuth()
+  const { apiFetch, apiPost, apiLoading } = ApiService()
 
 
   const handleScan = (text: string) => {
@@ -18,8 +20,8 @@ const ScannerPage: React.FC = () => {
   };
 
   const verifyCode = async (data: string) => {
-    const response = await axios.post("https://dawson.hamera.com/api/attendance.php", { user_id: userState?.user_id, verification_code: data })
-    if (!response.data.error) {
+    const response = await apiPost('attendance', { user_id: userState?.user_id, verification_code: data })
+    if (!response.error) {
       setIsError(false)
       setMessage(response.data.event_name)
     }

@@ -36,13 +36,14 @@ import { useAuth } from "../../providers/AuthProvider";
 import { link } from "ionicons/icons";
 import Calendar from "../../components/Calendar";
 import Jobs from "../../components/Jobs";
+import ApiService from "../../services/ApiService";
+
 
 const PrintJobsPage: React.FC = () => {
     const [jobs, setJobs] = useState([]);
-    const [loading, setLoading] = useState(true);
     const { userState } = useAuth();
-    const [isInvalid, setIsInvalid] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
+    const [error, setError] = useState({isInvalid: false, message: ""});
+    const { apiFetch, apiPost, apiLoading } = ApiService()
 
     useEffect(() => {
         fetchJobs();
@@ -50,48 +51,29 @@ const PrintJobsPage: React.FC = () => {
 
     // Function to fetch jobs from API
     const fetchJobs = async () => {
-        setLoading(true);
-        try {
-            const response = await axios.get(`https://dawson.hamera.com/api/get_jobs.php`);
+        const response = await apiFetch('get_jobs');
+        console.log(response)
+        if (response.error) {
+            setError({isInvalid: true, message: response.error})
+        } else {
             setJobs(response.data);
-            setLoading(false);
-        } catch (error) {
-            console.error("Error fetching jobs", error);
-            setLoading(false);
         }
     };
 
     // Function to add a job
     const handleAddJob = async (newJob: any) => {
-        try {
-            const result = await axios.post(`https://dawson.hamera.com/api/add_job.php`, newJob);
-            if (result && result.data.error) {
-                setIsInvalid(true)
-                setErrorMessage(result.data.error)
-            } else {
-                fetchJobs(); // Refresh jobs list
-            }
-        } catch (error: any) {
-            console.error("Error adding job", error);
-            setIsInvalid(true)
-            setErrorMessage(error)
+        if (await apiPost('add_job', newJob)) {
+            fetchJobs();
+        } else {
+            setError({isInvalid: true, message: "Error adding job"})
         }
     };
 
-    // Function to remove a job
     const handleRemoveJob = async (jobId: string) => {
-        try {
-            const result = await axios.post('https://dawson.hamera.com/api/remove_job.php', { job_id: jobId });
-            if (result && result.data.error) {
-                setIsInvalid(true)
-                setErrorMessage(result.data.error)
-            } else {
-                fetchJobs(); // Refresh jobs list
-            }
-        } catch (error: any) {
-            console.error("Error removing job:", error);
-            setIsInvalid(true)
-            setErrorMessage(error)
+        if (await apiPost('remove_job', {job_id: jobId})) {
+            fetchJobs();
+        } else {
+            setError({isInvalid: true, message: "Error removing job"})
         }
     };
 
@@ -114,14 +96,14 @@ const PrintJobsPage: React.FC = () => {
                     jobs={jobs}
                     onAddJob={handleAddJob}
                     onRemoveJob={handleRemoveJob}
-                    loading={loading}
+                    loading={apiLoading}
                     canEdit={userState?.role === 'admin'}
                 />
                 <IonAlert
-                    isOpen={isInvalid}
-                    onDidDismiss={() => setIsInvalid(false)}
+                    isOpen={error.isInvalid}
+                    onDidDismiss={() => setError({isInvalid: false, message: ''})}
                     header={'Error'}
-                    message={errorMessage}
+                    message={error.message}
                     buttons={['OK']}
                 />
             </IonContent>
