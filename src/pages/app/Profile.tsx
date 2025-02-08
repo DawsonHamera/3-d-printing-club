@@ -2,6 +2,7 @@ import React from 'react';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonProgressBar, IonAvatar, IonText, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonButton } from '@ionic/react';
 import { useAuth } from '../../providers/AuthProvider';
 import { useHistory } from 'react-router';
+import NetworkService from '../../services/NetworkService';
 
 // Function to generate initials from first and last names
 const getInitials = (firstName: any, lastName: any) => {
@@ -95,7 +96,6 @@ const ProfilePage: React.FC = () => {
             <IonButton onClick={() => window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSfSAIqiTNboYb2rnVFLQPJLfkLnBNdwi_E6QPPGO_EzzJAcEA/viewform?usp=dialog"}>Feedback Form</IonButton>
             </IonCardContent>
         </IonCard>
-
       </IonContent>
     </IonPage>
   );

@@ -8,9 +8,12 @@ import ProfilePage from "./Profile";
 import CalendarPage from "./CalendarPage";
 import UserManagementPage from "./UserManagment";
 import PrintJobsPage from "./PrinterJobsPage";
+import useNetworkStatus from "../../services/NetworkService";
 
 const Dashboard: React.FC = () => {
     const { authState, userState, isLoading } = useAuth();
+    const networkStatus = useNetworkStatus();
+
     if (!isLoading && !authState?.authenticated) {
         console.log("Need to auth");
         return <Redirect to="/sign-in" />;
@@ -48,9 +51,12 @@ const Dashboard: React.FC = () => {
                 <IonTabButton tab="tab3" href="/dashboard/calendar">
                     <IonIcon aria-hidden="true" icon={calendarOutline} />
                 </IonTabButton>
-                <IonTabButton tab="tab4" href="/dashboard/scanner">
-                    <IonIcon aria-hidden="true" icon={qrCodeOutline} />
-                </IonTabButton>
+                {networkStatus === 'online' && (
+                    <IonTabButton tab="tab4" href="/dashboard/scanner">
+                        <IonIcon aria-hidden="true" icon={qrCodeOutline} />
+                    </IonTabButton>
+                )}
+
                 {userState?.role === 'admin' && (
                     <IonTabButton tab="tab5" href="/dashboard/user-management">
                         <IonIcon aria-hidden="true" icon={peopleCircleOutline} />
