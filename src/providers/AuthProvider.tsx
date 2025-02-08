@@ -18,7 +18,7 @@ function parseJwt(token: string): { [key: string]: any } {
 interface AuthProps {
     isLoading?: boolean;
     authState?: { token: string | null; authenticated: boolean | null };
-    userState?: { user_id: number | null; firstName: string | null; lastName: string | null; role: string | null };
+    userState?: { user_id: number | null; email: string | null; firstName: string | null; lastName: string | null; role: string | null };
     onRegister?: (first_name: string, last_name: string, email: string, password: string, grade: string) => Promise<any>;
     onLogin?: (email: string, password: string) => Promise<any>;
     onLogout?: () => Promise<void>;
