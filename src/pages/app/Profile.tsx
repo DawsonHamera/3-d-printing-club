@@ -12,6 +12,7 @@ const getInitials = (firstName: any, lastName: any) => {
 const ProfilePage: React.FC = () => {
   const { userState, onLogout } = useAuth()
   const history = useHistory()
+  console.log(Intl.DateTimeFormat().resolvedOptions().timeZone);
 
   return (
     <IonPage>
