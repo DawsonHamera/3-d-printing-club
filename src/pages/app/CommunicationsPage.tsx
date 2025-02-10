@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     IonPage,
     IonHeader,
@@ -25,18 +25,26 @@ import {
     IonCard,
     IonCardContent,
     IonCardHeader,
-    IonCardTitle
+    IonCardTitle,
+    IonProgressBar
 } from "@ionic/react";
 import { close } from "ionicons/icons";
+import ApiService from "../../services/ApiService";
 
-const dummyUsers = Array.from({ length: 100 }, (_, i) => ({
-    id: i + 1,
-    name: `User ${i + 1}`,
-    email: `user${i + 1}@domain.com`,
-    role: ["user", "member", "admin"][i % 3],
-}));
+interface User {
+    user_id: number;
+    username: string;
+    email: string;
+    first_name: string;
+    last_name: string;
+    role: 'admin' | 'user' | 'member';
+    grade: 'freshman' | 'sophomore' | 'junior' | 'senior';
+    score: number;
+    created_at: string;
+  }
 
 const EmailForm: React.FC = () => {
+    const [users, setUsers] = useState<User[]>([])
     const [subject, setSubject] = useState("");
     const [body, setBody] = useState("");
     const [showModal, setShowModal] = useState(false);
@@ -44,10 +52,21 @@ const EmailForm: React.FC = () => {
     const [search, setSearch] = useState("");
     const [filter, setFilter] = useState("all");
 
-    const filteredUsers = dummyUsers.filter(
+    const { apiFetch, apiLoading } = ApiService()
+    
+    useEffect(() => {
+        const fetchUsers = async () => {
+            const users = await apiFetch('get_users')
+            setUsers(users.data)
+        }
+        fetchUsers()
+    }, [])
+    
+
+    const filteredUsers = users.filter(
         (user) =>
             (filter === "all" || user.role === filter) &&
-            user.name.toLowerCase().includes(search.toLowerCase())
+            user.username.toLowerCase().includes(search.toLowerCase())
     );
 
     const toggleUserSelection = (email: string) => {
@@ -63,7 +82,7 @@ const EmailForm: React.FC = () => {
     const quickSelect = (role: string) => {
         setFilter(role);
         setSelectedUsers(
-            dummyUsers.filter(user => role === "all" || user.role === role).map(user => user.email)
+            users.filter(user => role === "all" || user.role === role).map(user => user.email)
         );
     };
 
@@ -72,6 +91,10 @@ const EmailForm: React.FC = () => {
         window.location.href = mailtoLink;
 
     };
+
+    if (apiLoading) {
+        return <IonProgressBar type="indeterminate" />;
+    }
 
     return (
         <IonPage>
@@ -144,14 +167,14 @@ const EmailForm: React.FC = () => {
                         <IonButton expand="full" onClick={selectAllShown}>Select All Shown</IonButton>
                         <IonList>
                             {filteredUsers.map((user) => (
-                                <IonItem key={user.id}>
+                                <IonItem key={user.user_id}>
                                     <IonCheckbox
                                         labelPlacement="start"
                                         justify="space-between"
                                         checked={selectedUsers.includes(user.email)}
                                         onIonChange={() => toggleUserSelection(user.email)}
                                     >
-                                        {user.name}
+                                        {user.username}
                                     </IonCheckbox>
                                 </IonItem>
                             ))}
