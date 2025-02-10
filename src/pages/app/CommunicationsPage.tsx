@@ -32,6 +32,7 @@ import { close } from "ionicons/icons";
 const dummyUsers = Array.from({ length: 100 }, (_, i) => ({
     id: i + 1,
     name: `User ${i + 1}`,
+    email: `user${i + 1}@domain.com`,
     role: ["user", "member", "admin"][i % 3],
 }));
 
@@ -39,7 +40,7 @@ const EmailForm: React.FC = () => {
     const [subject, setSubject] = useState("");
     const [body, setBody] = useState("");
     const [showModal, setShowModal] = useState(false);
-    const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
+    const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
     const [search, setSearch] = useState("");
     const [filter, setFilter] = useState("all");
 
@@ -49,25 +50,27 @@ const EmailForm: React.FC = () => {
             user.name.toLowerCase().includes(search.toLowerCase())
     );
 
-    const toggleUserSelection = (id: number) => {
+    const toggleUserSelection = (email: string) => {
         setSelectedUsers((prev) =>
-            prev.includes(id) ? prev.filter((uid) => uid !== id) : [...prev, id]
+            prev.includes(email) ? prev.filter((e) => e !== email) : [...prev, email]
         );
     };
 
     const selectAllShown = () => {
-        setSelectedUsers(filteredUsers.map(user => user.id));
+        setSelectedUsers(filteredUsers.map(user => user.email));
     };
 
     const quickSelect = (role: string) => {
         setFilter(role);
         setSelectedUsers(
-            dummyUsers.filter(user => role === "all" || user.role === role).map(user => user.id)
+            dummyUsers.filter(user => role === "all" || user.role === role).map(user => user.email)
         );
     };
 
     const handleSubmit = () => {
-        console.log({ subject, body, selectedUsers });
+        const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}&bcc=${selectedUsers.join(",")}`;
+        window.location.href = mailtoLink;
+
     };
 
     return (
@@ -90,21 +93,21 @@ const EmailForm: React.FC = () => {
                     </IonCardHeader>
                     <IonCardContent>
 
-                    
-                    <IonInput
-                        placeholder="Subject"
-                        value={subject}
-                        onIonChange={(e) => setSubject(e.detail.value!)}
-                        className="ion-margin-bottom"
-                    />
-                    <IonTextarea
-                        placeholder="Body"
-                          fill="outline"
-                        autoGrow={true}
-                        value={body}
-                        onIonChange={(e) => setBody(e.detail.value!)}
-                        className="ion-margin-bottom"
-                    />
+
+                        <IonInput
+                            placeholder="Subject"
+                            value={subject}
+                            onIonChange={(e) => setSubject(e.detail.value!)}
+                            className="ion-margin-bottom"
+                        />
+                        <IonTextarea
+                            placeholder="Body"
+                            fill="outline"
+                            autoGrow={true}
+                            value={body}
+                            onIonChange={(e) => setBody(e.detail.value!)}
+                            className="ion-margin-bottom"
+                        />
                     </IonCardContent>
                     <IonButton expand="full" onClick={handleSubmit} className="ion-margin-top">Send Email</IonButton>
                 </IonCard>
@@ -145,8 +148,8 @@ const EmailForm: React.FC = () => {
                                     <IonCheckbox
                                         labelPlacement="start"
                                         justify="space-between"
-                                        checked={selectedUsers.includes(user.id)}
-                                        onIonChange={() => toggleUserSelection(user.id)}
+                                        checked={selectedUsers.includes(user.email)}
+                                        onIonChange={() => toggleUserSelection(user.email)}
                                     >
                                         {user.name}
                                     </IonCheckbox>

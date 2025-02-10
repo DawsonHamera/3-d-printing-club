@@ -78,6 +78,17 @@ const PrintJobsPage: React.FC = () => {
         }
     };
 
+    const handleAssignJob = async (jobId: string, userId: number) => {
+        console.log('Assigning', jobId, userId)
+        const response = await apiPost('assign_job', { job_id: jobId, user_id: userId })
+        console.log(response)
+        if (response) {
+            fetchJobs();
+        } else {
+            setError({isInvalid: true, message: "Error assigning job"})
+        }
+    }
+
     // Function to handle refresh action
     const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
         await fetchJobs();
@@ -97,6 +108,7 @@ const PrintJobsPage: React.FC = () => {
                     jobs={jobs}
                     onAddJob={handleAddJob}
                     onRemoveJob={handleRemoveJob}
+                    onAssignJob={handleAssignJob}
                     loading={apiLoading}
                     canEdit={userState?.role === 'admin'}
                 />

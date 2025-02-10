@@ -81,8 +81,8 @@ const Calendar: React.FC<CalendarProps> = ({ events, attendance, onAddEvent, onR
                                         <IonCardHeader>
                                             <IonCardTitle>{event.event_name}</IonCardTitle>
                                             <IonCardSubtitle>
-                                                {new Date(`1970-01-01T${event.start_time}Z`).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }) + " - "}
-                                                {new Date(`1970-01-01T${event.end_time}Z`).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
+                                                {new Date(`1970-01-01T${event.start_time}Z`).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true, timeZone: 'UTC' }) + " - "}
+                                                {new Date(`1970-01-01T${event.end_time}Z`).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true, timeZone: 'UTC' })}
                                             </IonCardSubtitle>
                                         </IonCardHeader>
 
@@ -93,7 +93,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, attendance, onAddEvent, onR
 
                                     <IonCol size="4">
                                         <div style={{ justifyItems: 'center' }}>
-                                            <h4>{new Date(event.event_date).toLocaleString('en-US', { month: 'short', day: 'numeric' }).toUpperCase()}</h4>
+                                            <h4>{new Date(event.event_date).toLocaleString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }).toUpperCase()}</h4>
                                             {qrcode ? (
                                                 <>
                                                     <QRCode
@@ -166,13 +166,13 @@ const Calendar: React.FC<CalendarProps> = ({ events, attendance, onAddEvent, onR
                             <IonInput label="Location" value={eventLocation} onIonInput={(event) => setEventLocation((event.detail.value ?? '') as string)}></IonInput>
                         </IonItem>
                         <IonItem>
-                            <IonButton onClick={() => setIsStartTimeOpen(true)}>Start time</IonButton> <p style={{ marginLeft: 15 }}>{new Date(startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                            <IonButton onClick={() => setIsStartTimeOpen(true)}>Start time</IonButton> <p style={{ marginLeft: 15 }}>{startTime ? new Date(startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</p>
                         </IonItem>
                         <IonItem>
-                            <IonButton onClick={() => setIsEndTimeOpen(true)}>End time</IonButton> <p style={{ marginLeft: 15 }}>{new Date(endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                            <IonButton onClick={() => setIsEndTimeOpen(true)}>End time</IonButton> <p style={{ marginLeft: 15 }}>{endTime ? new Date(endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</p>
                         </IonItem>
                         <IonItem>
-                            <IonButton onClick={() => setIsDateOpen(true)}>Date</IonButton> <p style={{ marginLeft: 15 }}>{new Date(eventDate).toLocaleString('en-US', { month: 'short', day: 'numeric' })}</p>
+                            <IonButton onClick={() => setIsDateOpen(true)}>Date</IonButton> <p style={{ marginLeft: 15 }}>{eventDate? new Date(eventDate).toLocaleString('en-US', { month: 'short', day: 'numeric' }) : ''}</p>
                         </IonItem>
                         <IonItem>
                             <IonInput label="Code" value={verificationCode} onIonInput={(event) => setVerificationCode((event.detail.value ?? '') as string)}></IonInput>
