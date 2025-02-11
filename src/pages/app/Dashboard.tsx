@@ -1,6 +1,6 @@
 import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonProgressBar, IonRouterOutlet } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { personCircleOutline, calendarOutline, qrCodeOutline, peopleCircle, peopleCircleOutline, fileTrayStacked, fileTrayStackedOutline, mailOutline } from "ionicons/icons";
+import { personCircleOutline, calendarOutline, qrCodeOutline, peopleCircle, peopleCircleOutline, fileTrayStacked, fileTrayStackedOutline, mailOutline, bugOutline } from "ionicons/icons";
 import { Redirect, Route } from "react-router";
 import ScannerPage from "./ScannerPage";
 import { useAuth } from "../../providers/AuthProvider";
@@ -10,6 +10,7 @@ import UserManagementPage from "./UserManagment";
 import PrintJobsPage from "./PrinterJobsPage";
 import useNetworkStatus from "../../services/NetworkService";
 import CommmuncationsPage from "./CommunicationsPage";
+import Test from "./TestComponenet";
 
 const Dashboard: React.FC = () => {
     const { authState, userState, isLoading } = useAuth();
@@ -43,6 +44,9 @@ const Dashboard: React.FC = () => {
                 <Route path="/dashboard/communications">
                     <CommmuncationsPage />
                 </Route>
+                <Route path="/dashboard/test">
+                    <Test />
+                </Route>
                 <Redirect exact path="/dashboard" to="/dashboard/profile" />
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
@@ -69,6 +73,11 @@ const Dashboard: React.FC = () => {
                 {userState?.role === 'admin' && (
                     <IonTabButton tab="tab6" href="/dashboard/communications">
                         <IonIcon aria-hidden="true" icon={mailOutline} color="secondary"/>
+                    </IonTabButton>
+                )}
+                {userState?.role === 'admin' && (
+                    <IonTabButton tab="tab6" href="/dashboard/test">
+                        <IonIcon aria-hidden="true" icon={bugOutline} color="secondary"/>
                     </IonTabButton>
                 )}
             </IonTabBar>
