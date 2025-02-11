@@ -62,10 +62,6 @@ const Calendar: React.FC<CalendarProps> = ({ events, attendance, onAddEvent, onR
         onRemoveEvent(eventId);
     };
 
-    const attending = events.filter(event => attendance.includes(event.event_id));
-    const other = events.filter(event => !attendance.includes(event.event_id));
-
-
     const renderEvents = (events: Event[], color: string) => (
         <>
             {events.map((event: Event) => (
@@ -206,6 +202,9 @@ const Calendar: React.FC<CalendarProps> = ({ events, attendance, onAddEvent, onR
     }
 
     const finalEvents = () => {
+        const attending = events.filter(event => attendance.includes(event.event_id));
+        const other = events.filter(event => !attendance.includes(event.event_id));
+
         if (attendance.length > 0) {
             if (other.length > 0) {
                 return (
@@ -235,7 +234,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, attendance, onAddEvent, onR
         <div>
             {canEdit && editEvents}
             <IonList lines="none">
-                {finalEvents()}
+                {Array.isArray(events) && events.length > 0 ? finalEvents() : (<p>No print jobs available.</p>)}
             </IonList>
         </div>
     )
