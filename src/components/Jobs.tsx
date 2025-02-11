@@ -99,6 +99,10 @@ const Jobs: React.FC<JobsProps> = ({ jobs, onAddJob, onRemoveJob, onAssignJob, l
         }
     }
 
+    useEffect(() => {
+        apiFetch('get_users').then((data) => setUsers(data.data));
+    }, []);
+
     const renderJobs = (jobs: PrintJob[]) => (
         <>
             {Array.isArray(jobs) && jobs.length > 0 ? (
@@ -107,6 +111,12 @@ const Jobs: React.FC<JobsProps> = ({ jobs, onAddJob, onRemoveJob, onAssignJob, l
                     if (job.assigned_to == userState?.user_id) {
                         color = "var(--ion-color-success)"; // Set color for the left border
                     }
+    
+                    // Find the assigned user
+                    const assignedUser = users.find((user) => user.user_id == job.assigned_to);
+                    const initials = assignedUser ? getInitials(`${assignedUser.first_name} ${assignedUser.last_name}`) : "Null";
+                    const assignedUsername = assignedUser ? assignedUser.username : '';
+    
                     return (
                         <IonItemSliding key={job.job_id}>
                             <IonItem>
@@ -129,12 +139,12 @@ const Jobs: React.FC<JobsProps> = ({ jobs, onAddJob, onRemoveJob, onAssignJob, l
                                                     <br />
                                                 </IonCardContent>
                                             </IonCol>
-
+    
                                             <IonCol size="4">
                                                 <div style={{ justifyItems: 'center' }}>
                                                     <h4>{new Date(new Date(job.job_date).setDate(new Date(job.job_date).getUTCDate())).toLocaleString('en-US', { month: 'short', day: 'numeric' }).toUpperCase()}</h4>
                                                 </div>
-
+    
                                                 {job.assigned_to ? (
                                                     <div style={{ position: 'relative' }}>
                                                         <IonAvatar
@@ -151,7 +161,7 @@ const Jobs: React.FC<JobsProps> = ({ jobs, onAddJob, onRemoveJob, onAssignJob, l
                                                                 margin: '0 auto',
                                                             }}
                                                         >
-                                                            {getInitials("P H")}
+                                                            {initials}
                                                         </IonAvatar>
                                                         {isJobTime(job.job_date) && (
                                                             <IonIcon
@@ -184,45 +194,44 @@ const Jobs: React.FC<JobsProps> = ({ jobs, onAddJob, onRemoveJob, onAssignJob, l
                                                                 onClick={() => handleAssignToJob(job.job_id, null, null)}
                                                             />
                                                         )}
-
                                                     </div>
                                                 ) : (
                                                     <div style={{ position: 'relative' }}>
-                                                    <IonButton
-                                                        style={{
-                                                            width: '50px',
-                                                            height: '50px',
-                                                            borderRadius: '100%',
-                                                            backgroundColor: color,
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            justifyContent: 'center',
-                                                            margin: '0 auto'
-                                                        }}
-                                                        disabled={isJobTime(job.job_date)}
-                                                        shape="round"
-                                                        onClick={() => handleAssignToJob(job.job_id, userState?.user_id, null)}
-                                                    >
-                                                        <IonIcon icon={add} color="light" size="large" />
-                                                    </IonButton>
-                                                    {isJobTime(job.job_date) && (
-                                                        <IonIcon
-                                                            icon={lockClosed}
+                                                        <IonButton
                                                             style={{
-                                                                position: 'absolute',
-                                                                bottom: -2,
-                                                                right: 22,
-                                                                backgroundColor: 'var(--ion-color-dark)',
-                                                                borderRadius: '50%',
-                                                                padding: '2px',
-                                                                fontSize: '18px',
-                                                                color: 'var(--ion-color-light)',
+                                                                width: '50px',
+                                                                height: '50px',
+                                                                borderRadius: '100%',
+                                                                backgroundColor: color,
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                margin: '0 auto'
                                                             }}
-                                                        />
-                                                    )}
+                                                            disabled={isJobTime(job.job_date)}
+                                                            shape="round"
+                                                            onClick={() => handleAssignToJob(job.job_id, userState?.user_id, null)}
+                                                        >
+                                                            <IonIcon icon={add} color="light" size="large" />
+                                                        </IonButton>
+                                                        {isJobTime(job.job_date) && (
+                                                            <IonIcon
+                                                                icon={lockClosed}
+                                                                style={{
+                                                                    position: 'absolute',
+                                                                    bottom: -2,
+                                                                    right: 22,
+                                                                    backgroundColor: 'var(--ion-color-dark)',
+                                                                    borderRadius: '50%',
+                                                                    padding: '2px',
+                                                                    fontSize: '18px',
+                                                                    color: 'var(--ion-color-light)',
+                                                                }}
+                                                            />
+                                                        )}
                                                     </div>
                                                 )}
-                                                <p style={{ textAlign: 'center' }}>{job.assigned_to === userState?.user_id ? "You" : job.assigned_to}</p>
+                                                <p style={{ textAlign: 'center' }}>{job.assigned_to === userState?.user_id ? "You" : assignedUsername}</p>
                                             </IonCol>
                                         </IonRow>
                                     </IonGrid>
@@ -243,7 +252,7 @@ const Jobs: React.FC<JobsProps> = ({ jobs, onAddJob, onRemoveJob, onAssignJob, l
             )}
         </>
     );
-
+    
     const editJobs = (
         <>
             <IonButton onClick={() => setIsMainModalOpen(true)} className="center">Add Print Job</IonButton>
@@ -289,11 +298,6 @@ const Jobs: React.FC<JobsProps> = ({ jobs, onAddJob, onRemoveJob, onAssignJob, l
                                 value={assignedTo}
                                 placeholder="none"
                                 onIonChange={(e) => setAssignedTo(e.detail.value!)}
-                                onIonFocus={async () => {
-                                    const data = await apiFetch('get_users');
-                                    setUsers(data.data);
-
-                                }}
                             >
                                 <IonSelectOption value={null}>
                                             None (open)
