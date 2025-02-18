@@ -39,6 +39,7 @@ const ApiService = () => {
     };
 
     const apiPost = async (endpoint: string, data: any) => {
+        console.log(`Posting to  ${endpoint}`)
         setApiLoading(true);
         await waitForLoading();
         try {
@@ -47,6 +48,7 @@ const ApiService = () => {
                 console.error(`Error posting to ${endpoint} with data ${data}:`, response.data.error);
                 return { error: response.data.error, data: null };
             }
+            console.log('Post successful:', response.data)
             return { error: null, data: response.data }
         } catch (error) {
             console.error(`Error posting to ${endpoint} with data ${data}:`, error);

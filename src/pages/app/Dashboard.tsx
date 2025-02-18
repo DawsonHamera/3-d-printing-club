@@ -76,7 +76,7 @@ const Dashboard: React.FC = () => {
                     </IonTabButton>
                 )}
                 {userState?.role === 'admin' && (
-                    <IonTabButton tab="tab6" href="/dashboard/test">
+                    <IonTabButton tab="tab7" href="/dashboard/test">
                         <IonIcon aria-hidden="true" icon={bugOutline} color="secondary"/>
                     </IonTabButton>
                 )}
